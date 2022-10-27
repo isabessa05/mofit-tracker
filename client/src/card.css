@@ -1,0 +1,19 @@
+.card {
+    width: 90%;
+    display: grid;
+    flex-direction: column;
+    border: 5px black solid;
+    margin-left: 5%;
+
+}
+
+.header {
+    height: 30%;
+    background: black;
+    color: white;
+    text-align: center;
+}
+
+.container {
+    padding: 2px 16px;
+}
