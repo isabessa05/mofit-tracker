@@ -8,12 +8,12 @@ class UsersController < ApplicationController
     end
 
     def create
-        user = User.create(username: params[:username], password_digest: params[:password_digest])
+        user = User.create(user_params)
         if user.valid?
             session[:user_id] = user.id
             render json: user, status: :created
         else 
-            render json: {errors: user.erros.full_messages}, status: :unprocessable_entity
+            render json: {errors: user.errors.full_messages}, status: :unprocessable_entity
         end
     end
 
@@ -31,6 +31,10 @@ class UsersController < ApplicationController
         def authorize
         
             return render json: { error: "Not authorized" }, status: :unauthorized unless session.include? :user_id
+        end
+
+        def user_params
+            params.permit(:first_name, :last_name, :username, :password)
         end
     
 end

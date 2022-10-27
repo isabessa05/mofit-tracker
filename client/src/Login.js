@@ -1,15 +1,16 @@
 import {useState, useEffect} from 'react'
 
-function Login({handleLogIn}) {
+function Login({handleLogIn, errors}) {
     const [user, setUser] = useState("")
     const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [isLogged, setIsLogged] = useState(false)
-
+ 
+  const allErrors = errors.map((err) => (
+    <h1 key={err}>{err}</h1>
+  ))
 
   function handleSubmitLogIn(e) {
     e.preventDefault();
-    setIsLogged(true);
     const userLog = {
       username: username,
       password: password
@@ -41,12 +42,11 @@ function Login({handleLogIn}) {
           />
           <button type="submit">Login</button>
         </form>
-        {errors.map((err) => (
-            <h1 key={err}>{err}</h1>
-          ))}
+            {errors? allErrors : null }
           <h1>Welcome {user.first_name}</h1>
       </div>
     )
 }
+
 
 export default Login

@@ -1,7 +1,7 @@
 // client/src/components/App.js
 import { useState, useEffect } from "react";
 
-function WorkoutForm() {
+function WorkoutForm({user, handleAddWorkout}) {
 
   const [exercise, setExercise] = useState([])
   const [mood, setMood] = useState()
@@ -37,16 +37,17 @@ function handleSubmit(e) {
     const workoutNew = {
       mood: mood,
       workout_type: exerciseName,
-      user_id: 3,
+      user_id: user.id,
       duration: duration
     }
-    fetch('/workouts', {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify(workoutNew)
-});
+    handleAddWorkout(workoutNew)
+//     fetch('/workouts', {
+//   method: "POST",
+//   headers: {
+//     "Content-Type": "application/json",
+//   },
+//   body: JSON.stringify(workoutNew)
+// });
   }
 
  return (

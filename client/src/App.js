@@ -5,6 +5,8 @@ import WorkoutForm from "./WorkoutForm";
 import './card.css'
 import NavBar from "./NavBar";
 import Login from "./Login";
+import WorkoutCard from "./WorkoutCard";
+import SignUp from "./SignUp";
 
 function App() {
   const [user, setUser] = useState(null)
@@ -25,7 +27,7 @@ function App() {
 
 // Showing all workout data
   useEffect(() => {
-    fetch(`/workouts/${user.id}`)
+    fetch(`/workouts`)
       .then(res => res.json())
       .then(data =>
         setAllWorkouts(data))
@@ -60,32 +62,40 @@ function handleLogIn(userLog){
     
     }
     else {
-      r.json().then((err) => setErrors(err.errors));
+      r.json().then((err) => console.log(err.errors));
     }
   })
 }
 //End of login function 
 
 
-  const workoutState = allWorkouts.map((workout) => {
-    return (
-      <div class="card">
-        <div class="header">
-        </div>
-        <div class="container">
-          <p>Duration: {workout.duration}</p>
-          <p>Exercise: {workout.workout_type.name}</p>
-          <p>Date: {workout.date}</p>
-          <p>Mood: {workout.mood}</p>
-        </div>
-        <button>Edit</button>
-        <button>Delete</button>
-      </div>
-    )
+//start of workout function
+function handleAddWorkout (workoutNew) {
+fetch('/workouts', {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify(workoutNew)
+}).then(res => res.json())
+.then(newWorkout => setAllWorkouts([...allWorkouts, newWorkout]));
+}
 
-  })
+//end of workout function
+let workoutState 
+let showWorkouts
 
+if (user) {
+   workoutState = allWorkouts.filter((item) => {
+    return (item.user_id == user.id)})
 
+  showWorkouts = workoutState.map((workout)=> {
+  return <WorkoutCard workout={workout}/>})
+ 
+}
+    
+
+console.log(showWorkouts)
   return (
     <BrowserRouter>
     <div>
@@ -93,13 +103,16 @@ function handleLogIn(userLog){
       {user? <h1>Welcome {user.first_name}</h1> : null}
       <Switch>
         <Route exact path="/newworkout">
-          <WorkoutForm />
+          <WorkoutForm user={user} handleAddWorkout={handleAddWorkout}/>
         </Route>
         <Route exact path="/login">
-          <Login handleLogIn={handleLogIn(userLog)}/>
+          <Login handleLogIn={handleLogIn} errors ={errors}/>
+        </Route>
+        <Route exact path='/signup'>
+         <SignUp setUser={setUser}/>
         </Route>
       </Switch>
-      {workoutState}
+      {user? <h1>{showWorkouts}</h1> : null}
     </div>
     </BrowserRouter>
 

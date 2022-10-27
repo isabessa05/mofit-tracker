@@ -9,6 +9,7 @@ function NavBar ({handleLogOut}) {
         <Link to="/login"> Log In   </Link>
         <Link to="/newworkout"> Add Workout  </Link>
         <Link onClick={handleLogOut}>Log Out</Link>
+        <Link to="/signup"> Sign Up </Link>
         </div>
         </nav>
     )
